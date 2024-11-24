@@ -678,12 +678,61 @@ end
 -- Bro Fuck off my code skid, dont even think on spamming it its limited.
 -- HAHA
 
-local options = {
-    Url = "https://discord.com/api/webhooks/1307357106067869696/2p29sLwHDp1VDGBU2-vLq-pPBGlhdK3UIQV3cMtGRZN6cW5s8nJMHDNho5HQJbloMrbF",
-    Body = HttpService:JSONEncode({
-        ['content'] = tostring(script:GetFullName()),
-        ['username'] = (game.Players.LocalPlayer or game.Players.PlayerAdded:Wait()).Name,
-    }),
+-- Services
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+
+-- Function to get Roblox username
+local function getRobloxUsername()
+    local localPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait()
+    return localPlayer.Name
+end
+
+-- Function to get Discord username
+-- Note: This requires access to Discord's API or pre-stored data. 
+-- In Roblox, you would typically need external tools or integrations for this.
+local function getDiscordUsername()
+    -- This is a placeholder. Actual implementation depends on how Discord usernames are fetched.
+    -- If integrating with Discord API, you would authenticate and retrieve user data.
+    return "DiscordUserPlaceholder" -- Replace with actual logic if available
+end
+
+-- Function to send a webhook
+local function sendWebhook(url, content, username)
+    local body = HttpService:JSONEncode({
+        ['content'] = content,
+        ['username'] = username
+    })
+
+    -- Make the HTTP request
+    local success, response = pcall(function()
+        return HttpService:PostAsync(url, body, Enum.HttpContentType.ApplicationJson, false)
+    end)
+
+    -- Check the response
+    if success then
+        print("Welcome to RoxCore!")
+    else
+        warn("RoxCore - Server failed:", response)
+    end
+end
+
+-- Main logic
+local function main()
+    -- Define the webhook URL
+    local webhookUrl = "https://discord.com/api/webhooks/1310060635760885771/psr7H66vQKveJaJ2Q-KXf9z1L_XUSUh0IssFIUMueOJ_25MCgEV2SsKqKb3e2SEa3JlD"
+
+    -- Determine username
+    local username = getRobloxUsername() -- Replace with getDiscordUsername() if context requires it
+    local content = "This is a test webhook message."
+
+    -- Send the webhook
+    sendWebhook(webhookUrl, content, username)
+end
+
+-- Execute the main function
+main()
+
     Method = 'POST',
     Headers = {
         ["Content-Type"] = "application/json"
